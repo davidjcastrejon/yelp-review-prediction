@@ -6,7 +6,7 @@ This repository contains a machine learning project that predicts the star ratin
 
 - [Overview](#overview)
 - [Requirements](#requirements)
-- [Data Preparation](#data-preparation)
+- [Data Preprocessing](#data-preprocessing)
 - [Model Architecture](#model-architecture)
 - [Usage](#usage)
 - [Results](#results)
@@ -32,24 +32,33 @@ You can install the necessary packages using pip:
 pip install numpy matplotlib scikit-learn tensorflow
 ```
 
-## Data Preparation
+## Data Preprocessing
 
-The code expects a JSON file containing Yelp reviews, with each review containing the fields `text` and `stars`. Ensure your dataset is formatted similarly to the Yelp Academic Dataset.
+This project involves preprocessing Yelp's academic dataset to filter and refine the data for further analysis. The preprocessing steps are as follows:
 
-### Example JSON Structure
+1. **Loading the Dataset**:
+   - The initial dataset consists of several JSON files, including `yelp_academic_dataset_business.json`, `yelp_academic_dataset_checkin.json`, `yelp_academic_dataset_review.json`, and `yelp_academic_dataset_tip.json`.
+   - Each JSON file is read line by line, and each line is parsed into a Python dictionary.
 
-```json
-[
-  {
-    "text": "The food was amazing!",
-    "stars": 5
-  },
-  {
-    "text": "Service was terrible.",
-    "stars": 1
-  }
-]
-```
+2. **Filtering Business Data**:
+   - The business data is filtered to retain only those entries with a review count of 20 or more. This is done to ensure that only businesses with a sufficient amount of feedback are included for analysis.
+   - The filtered business data is saved to a new JSON file named `filtered_yelp_academic_dataset_business.json`.
+
+3. **Extracting Business IDs**:
+   - The filtered business data is then used to extract the unique business IDs, which will be used for filtering related data in other datasets.
+
+4. **Filtering Path Data**:
+   - For each of the other datasets (`checkin`, `review`, `tip`), entries are filtered based on the business IDs obtained from the filtered business dataset. Only entries with business IDs present in the filtered business dataset are retained.
+   - The filtered path data is saved to new JSON files named `filtered_yelp_academic_dataset_checkin.json`, `filtered_yelp_academic_dataset_review.json`, and `filtered_yelp_academic_dataset_tip.json`.
+
+5. **Summary of Data After Filtering**:
+   - The lengths of the unfiltered and filtered datasets are printed to provide insight into the reduction in data size:
+     - Length of unfiltered business data: 150,346 lines
+     - Length of filtered business data: 61,919 lines
+     - Length of filtered checkin data: 79,945 lines
+     - Length of filtered tip data: 60,448 lines
+
+By following these steps, this ensures that the dataset is clean, relevant, and ready for subsequent analyses or machine learning applications.
 
 ## Model Architecture
 
